@@ -1,0 +1,30 @@
+{
+  "name": "citrouille",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "sh scripts/start.sh",
+    "deploy": "sh scripts/deploy.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/router": "^12.0.1",
+    "dayjs": "^1.11.10",
+    "fast-glob": "^3.3.2",
+    "handlebars": "^4.7.8",
+    "koa": "^2.15.0",
+    "koa-bodyparser": "^4.4.1",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "daisyui": "^4.6.0",
+    "nodemon": "^3.0.2",
+    "tailwindcss": "^3.4.1"
+  }
+}
