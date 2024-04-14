@@ -5,11 +5,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/assets/styles.css" rel="stylesheet">
   <script src="/assets/alpine.js" defer=""></script>
+  <script>
+    // Drag
+    window.onload = function() {
+      document.querySelector('main').addEventListener('mousedown', e =>{
+        console.log('DOWN', e.target)
+        if(!e.target.className.includes('draggable')) return;
+        e.target.style.transition = ''
+
+        let start;
+        function move(mouse) {
+          if(start==null) start = mouse.clientX;
+          const dir = Math.sign(mouse.clientX-start)
+          const offsetX = Math.pow(Math.abs(mouse.clientX-start), 1.2) * dir
+          const offsetY = -Math.pow(Math.abs(mouse.clientX-start), 1.2)/10
+          e.target.style.transform = 'translate('+offsetX+'px, '+offsetY+'px)'
+        }
+
+        function reset() {
+          e.target.style.transition = 'transform 500ms cubic-bezier(0, 0, 0.2, 1)'
+          e.target.style.transform = 'translate(0px, 0px)'
+          window.removeEventListener('mousemove', move);
+          window.removeEventListener('mouseup', reset);
+        }
+
+        window.addEventListener('mousemove', move);
+        window.addEventListener('mouseup', reset);
+      })
+    }
+
+  </script>
   <title>Citrouille</title>
 </head>
 <body>
-  <main class="border">
-    <h1>Hello</h1>
+  <main class="mx-auto max-w-sm my-8">
+    <h1 class="text-3xl text-center">Citrouille</h1>
+    <article>
+      <img draggable="false" class="draggable rounded-md my-8" src="/images/one.jpg" width="100%"/>
+      <fieldset class="grid gap-6">
+        <textarea id="notes" placeholder="Notes ..."></textarea>
+        <div class="flex items-center gap-2 justify-center">
+          <img width="50" src="/assets/pumpkin-color.svg"/>
+          <img width="50" src="/assets/pumpkin-plain.svg"/>
+          <img width="50" src="/assets/pumpkin-plain.svg"/>
+        </div>
+      </fieldset>
+    </article>
   </main>
   
 </body>

@@ -4,3 +4,13 @@
 
 /*For Alpinsjs transitions @see https://alpinejs.dev/directives/cloak */
 [x-cloak] { display: none !important; } 
+
+
+.no-drag {
+  user-drag: none;
+  -webkit-user-drag: none;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}

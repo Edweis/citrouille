@@ -4,7 +4,8 @@ set -e
 sudo ln -fs \
   /Users/francoisrulliere/Documents/edweis/citrouille/nginx.local.conf \
   /opt/homebrew/etc/nginx/servers/citrouille.conf || true;
-sudo nginx -t; sudo nginx -s reload;
+sudo nginx -t
+sudo nginx -s reload
 
 
 pnpm nodemon -e hbs,js --watch src src/index.js &
