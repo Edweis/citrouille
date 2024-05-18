@@ -3,6 +3,8 @@ import Router from '@koa/router';
 import bodyParser from 'koa-bodyparser'
 import { catchErrors } from './lib/catch-errors.js';
 import { render } from './lib/render.js';
+import serve from 'koa-static'
+import mount from 'koa-mount'
 const app = new Koa();
 const router = new Router();
 
@@ -11,6 +13,9 @@ app
   .use(bodyParser())
   .use(catchErrors)
 
+// Assets
+app.use(mount('/images', serve('src/images')))
+app.use(mount('/assets', serve('src/assets')))
 
 
 // Endpoints

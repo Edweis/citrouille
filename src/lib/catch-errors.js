@@ -1,5 +1,5 @@
 export async function  catchErrors(ctx, next) {
-  console.log(ctx.method, ctx.path)
+  console.log('➡', ctx.method, ctx.path)
   try {
     await next()
   } catch (error) {
@@ -7,4 +7,5 @@ export async function  catchErrors(ctx, next) {
     ctx.status = 500
     ctx.body = { ...error, message: error.message }
   }
+  console.log('⬅', ctx.method, ctx.path, ctx.status)
 }
