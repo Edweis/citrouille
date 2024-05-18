@@ -1,11 +1,12 @@
 import Koa from 'koa';
 import Router from '@koa/router';
-import bodyParser from 'koa-bodyparser'
+import { koaBody } from 'koa-body'
 import { catchErrors } from './lib/catch-errors.js';
 import { render } from './lib/render.js';
 import serve from 'koa-static'
 import mount from 'koa-mount'
 import fs from 'fs/promises'
+import os from 'os'
 const app = new Koa();
 const router = new Router();
 
@@ -29,11 +30,13 @@ router.get('/', async (ctx) => {
   ctx.body = render('main', { file: file })
 });
 
-const random = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-router.post('/', bodyParser({ multipart: true }), async (ctx) => {
-  console.log('files: ', ctx.request.files, ctx.request.body);
-
-  ctx.redirect('/HELLO')
+const genFilename = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+const parseFile = koaBody({ multipart: true, formidable: { filename: genFilename } })
+router.post('/', parseFile, async (ctx) => {
+  console.log('FILES', ctx.request.body, ctx.request.files)
+  const { filepath, newFilename } = ctx.request.files.photo
+  await fs.rename(filepath, 'src/images/' + newFilename)
+  ctx.redirect('/?file=' + newFilename)
 })
 
 app
