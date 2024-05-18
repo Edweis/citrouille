@@ -10,9 +10,7 @@ const app = new Koa();
 const router = new Router();
 
 // Middlewares
-app
-  .use(bodyParser())
-  .use(catchErrors)
+app.use(catchErrors)
 
 // Assets
 app.use(mount('/images', serve('src/images')))
@@ -21,13 +19,22 @@ app.use(mount('/assets', serve('src/assets')))
 
 // Endpoints
 router.get('/', async (ctx) => {
-  const name = ctx.query.name
-  if (name) ctx.body = render('main', { name })
-  const allFiles = await fs.readdir('src/images')
-  const file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
-  ctx.body = render('main', { name: file })
+  let file = ctx.query.file
+  if (file == null) {
+    const allFiles = await fs.readdir('src/images')
+    file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
+    ctx.redirect('/?file=' + file)
+  }
+  file = file.split('/')[0] // 'Security'
+  ctx.body = render('main', { file: file })
 });
 
+const random = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+router.post('/', bodyParser({ multipart: true }), async (ctx) => {
+  console.log('files: ', ctx.request.files, ctx.request.body);
+
+  ctx.redirect('/HELLO')
+})
 
 app
   .use(router.routes())

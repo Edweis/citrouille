@@ -54,10 +54,14 @@
   <main class="mx-auto max-w-sm my-8 px-4 overflow-x-hidden">
     <header class="flex justify-between mb-8">
       <h1 class="text-3xl">Citrouille</h1>
-      <button class="btn btn-primary">Take a photo</button>
+      <form action="/" method="POST">
+        <label class="link link-primary">Add
+          <input name="photo" type="file" class="hidden" onchange="form.submit()"/>
+        </label>
+      </form>
     </header>
     <article class="grid gap-8">
-      <img class="rounded-xl border" src="/images/{{name}}" width="100%"/>
+      <img class="rounded-xl" src="/images/{{file}}" width="100%"/>
       <div class="flex justify-between">
         <a href="/" class="btn btn-accent">Next</a>
         <a href="/" class="btn btn-primary">Keep</a>
