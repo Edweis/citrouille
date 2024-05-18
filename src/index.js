@@ -23,11 +23,11 @@ router.get('/', async (ctx) => {
   let file = ctx.query.file
   if (file == null) {
     const allFiles = await fs.readdir('src/images')
-    if (allFiles.length > 0)
-      file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
+    if (allFiles.length===0)file = 'no-file'
+    else file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
     ctx.redirect('/?file=' + file)
   }
-  file = file.split('/')[0] // 'Security'
+  file = file.split('/')[0] // for 'Security'
   ctx.body = render('main', { file: file })
 });
 

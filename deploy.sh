@@ -14,7 +14,7 @@ ssh -t $USER@$SERVER "cd kobe ; pnpm install --prod"
 echo "\n🏃🏻‍♂️ Restart nginx" # sudo ln -s /home/ubuntu/kobe/nginx.conf /etc/nginx/conf.d/kobe.conf # Make sure the symlink exists 
 ssh $USER@$SERVER "sudo nginx -t && sudo nginx -s reload"
 
-echo "\n🏃🏻‍♂️ Restart kobe"
+echo "\n🏃🏻‍♂️ Restart $PROJECT"
 ssh $USER@$SERVER pm2 reload kobe 
 
 
