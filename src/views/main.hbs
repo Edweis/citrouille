@@ -52,20 +52,24 @@
 </head>
 <body>
   <main class="mx-auto max-w-sm my-8 px-4 overflow-x-hidden">
-    <header class="flex justify-between">
+    <header class="flex justify-between mb-8">
       <h1 class="text-3xl">Citrouille</h1>
-      <button class="btn btn-primary">Add</button>
+      <button class="btn btn-primary">Take a photo</button>
     </header>
-    <article>
-      <img draggable="false" class="draggable rounded-xl my-8" src="/images/one.jpg" width="100%"/>
+    <article class="grid gap-8">
+      <img class="rounded-xl border" src="/images/{{name}}" width="100%"/>
+      <div class="flex justify-between">
+        <a href="/" class="btn btn-accent">Next</a>
+        <a href="/" class="btn btn-primary">Keep</a>
+      </div>
       <fieldset class="grid gap-6">
         <textarea id="notes" placeholder="Notes ..."></textarea>
         <div class="flex items-center gap-2 justify-center" x-data="{ rating: '1' }">
-          <template x-for="xxx in 3">
-          <label class="group">
-            <img x-show="rating >= xxx" width="50" src="/assets/pumpkin-color.svg"/>
-            <img x-show="rating < xxx" width="50" src="/assets/pumpkin-plain.svg"/>
-            <input x-model="rating" type="radio" :value="xxx" class="hidden"/>
+          <template x-for="index in 3">
+          <label class="group cursor-pointer">
+            <img x-show="rating >= index" width="50" src="/assets/pumpkin-color.svg"/>
+            <img x-show="rating < index" width="50" src="/assets/pumpkin-plain.svg"/>
+            <input x-model="rating" type="radio" :value="index" class="hidden"/>
           </label>  
           </template>
         </div>

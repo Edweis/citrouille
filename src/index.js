@@ -5,6 +5,7 @@ import { catchErrors } from './lib/catch-errors.js';
 import { render } from './lib/render.js';
 import serve from 'koa-static'
 import mount from 'koa-mount'
+import fs from 'fs/promises'
 const app = new Koa();
 const router = new Router();
 
@@ -20,7 +21,11 @@ app.use(mount('/assets', serve('src/assets')))
 
 // Endpoints
 router.get('/', async (ctx) => {
-  ctx.body = render('main')
+  const name = ctx.query.name
+  if (name) ctx.body = render('main', { name })
+  const allFiles = await fs.readdir('src/images')
+  const file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
+  ctx.body = render('main', { name: file })
 });
 
 
