@@ -2,3 +2,4 @@ node_modules/
 database.db
 .git
 src/images/*
+database.db

@@ -6,7 +6,9 @@ import { render } from './lib/render.js';
 import serve from 'koa-static'
 import mount from 'koa-mount'
 import fs from 'fs/promises'
-import os from 'os'
+import shell from 'shelljs';
+
+
 const app = new Koa();
 const router = new Router();
 
@@ -14,9 +16,9 @@ const router = new Router();
 app.use(catchErrors)
 
 // Assets
-const ONE_YEAR_IN_MS=1000 * 60 * 60 * 24 * 365
-app.use(mount('/images', serve('src/images', {maxage: ONE_YEAR_IN_MS})))
-app.use(mount('/assets', serve('src/assets', {maxage: ONE_YEAR_IN_MS})))
+const ONE_YEAR_IN_MS = 1000 * 60 * 60 * 24 * 365
+app.use(mount('/images', serve('src/images', { maxage: ONE_YEAR_IN_MS })))
+app.use(mount('/assets', serve('src/assets', { maxage: ONE_YEAR_IN_MS })))
 
 
 // Endpoints
@@ -24,7 +26,7 @@ router.get('/', async (ctx) => {
   let file = ctx.query.file
   if (file == null) {
     const allFiles = await fs.readdir('src/images')
-    if (allFiles.length===0)file = 'no-file'
+    if (allFiles.length === 0) file = 'no-file'
     else file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
     ctx.redirect('/?file=' + file)
   }
@@ -37,8 +39,10 @@ const parseFile = koaBody({ multipart: true, formidable: { filename: genFilename
 router.post('/', parseFile, async (ctx) => {
   console.log('FILES', ctx.request.body, ctx.request.files)
   const { filepath, newFilename } = ctx.request.files.photo
-  await fs.rename(filepath, 'src/images/' + newFilename)
-  ctx.redirect('/?file=' + newFilename)
+  console.log('Starting convert ...')
+  shell.exec(`convert ${filepath} -resize 1080x1920^ -gravity center -crop 1080x1920+0+0 +repage -quality 80 ${filepath}.webp`)
+  await fs.rename(filepath + '.webp', 'src/images/' + newFilename + '.webp')
+  ctx.redirect('/?file=' + newFilename+'.webp')
 })
 
 app
