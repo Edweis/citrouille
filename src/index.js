@@ -43,10 +43,12 @@ router.post('/', parseFile, async (ctx) => {
   console.log(ctx.request.files)
   const { filepath, newFilename } = ctx.request.files.photo
   await fs.rename(filepath, 'src/images/' + newFilename)
-  await database.run(`INSERT INTO photos (id) VALUES (?);`, newFilename) 
+  await database.run(`INSERT INTO photos (id) VALUES (?)`, newFilename) 
   ctx.redirect('/?file=' + newFilename)
 })
-router.post('/edit/:file', koaBody({}), async (ctx) => {
+
+// Update a photo
+router.post('/edit/:file', koaBody(), async (ctx) => {
   const file = ctx.params.file
   const { note, difficulty, category } = ctx.request.body
   console.log('UPDATING ...', ctx.request.body, file)

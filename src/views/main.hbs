@@ -3,8 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="/assets/icon-512x512.png">
+  <meta name="theme-color" content="#fff248"/>
+
+  <link rel="icon" href="/assets/icon-384x384.png">
+  <link rel="apple-touch-icon" href="/assets/icon-384x384.png">
   <link rel="manifest" href="/assets/manifest.json" />
+
   <link href="/assets/styles.css" rel="stylesheet">
   <script src="/assets/alpine.js" defer=""></script>
   <script src="/assets/compressor.js" defer=""></script>
@@ -39,7 +43,7 @@
       </label>
     </header>
     <article class="grid gap-8">
-      <img x-show="!submitting" class="rounded-xl" src="/images/{{file}}" width="100%" style="aspect-ratio: 9/16;"/>
+      <img x-show="!submitting" class="rounded-xl mx-auto" src="/images/{{file}}"    style="aspect-ratio: 9/16; height:75vh;"/>
       <span x-show="submitting">Uploadin ...</span>
       <div class="flex justify-between">
         <a href="/" class="btn btn-accent">Next</a>

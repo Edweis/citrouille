@@ -4,7 +4,7 @@
   "short_name": "Citrouille",
   "start_url": "https://citrouille.kapochamo.com",
   "display": "standalone",
-  "background_color": "#f8fdef",
+  "background_color": "#ed7c00",
   "description": "Tinder of BDKs.",
   "icons": [
     {
