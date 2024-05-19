@@ -54,8 +54,8 @@
         <div class="flex items-center gap-2 justify-center" x-data="{ difficulty: {{details.difficulty}} }">
           <template x-for="index in 3">
           <label class="group cursor-pointer">
-            <img x-show="difficulty >= index" width="50" src="/assets/pumpkin-color.svg"/>
-            <img x-show="difficulty < index" width="50" src="/assets/pumpkin-plain.svg"/>
+            <img x-show="difficulty >= index" height="50" width="50" src="/assets/pumpkin-color.svg"/>
+            <img x-show="difficulty < index" height="50" width="50" src="/assets/pumpkin-plain.svg"/>
             <input x-model="difficulty" type="radio" :value="index" class="hidden"/>
           </label>  
           </template>
@@ -63,6 +63,9 @@
         <button href="/" class="btn btn-primary">Save</button>
       </form>
     </article>
+    <form method="post" action="/delete/{{file}}" class="mt-8 text-center">
+      <button class="link link-error" @click="confirm('No more of this BDK 😢?') || event.preventDefault()">Delete</button>
+    </form>
   </main>
   
 </body>

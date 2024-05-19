@@ -59,6 +59,14 @@ router.post('/edit/:file', koaBody(), async (ctx) => {
   ctx.redirect('/?file=' + file)
 })
 
+// Delete a photo
+router.post('/delete/:file', koaBody(), async (ctx) => {
+  const file = ctx.params.file;
+  await database.run(`DELETE FROM photos WHERE id = ?`, file);
+  fs.unlink('src/images/' + file)
+  ctx.redirect('/')
+})
+
 app
   .use(router.routes())
   .use(router.allowedMethods())
