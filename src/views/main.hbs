@@ -50,18 +50,19 @@
   </script>
   <title>Citrouille</title>
 </head>
-<body>
+<body x-data="{ submitting: false }">
   <main class="mx-auto max-w-sm mt-8 px-4 overflow-x-hidden">
     <header class="flex justify-between mb-4 items-center">
       <h1 class="text-3xl">Citrouille</h1>
-      <form action="/" method="POST" enctype="multipart/form-data">
+      <form @submit="submitting = true" action="/" method="POST" enctype="multipart/form-data">
         <label class="link link-primary">Add
-          <input name="photo" type="file" class="hidden" onchange="form.submit()"/>
+          <input name="photo" type="file" class="hidden" onchange="form.submit();"/>
         </label>
       </form>
     </header>
     <article class="grid gap-8">
-      <img class="rounded-xl" src="/images/{{file}}" width="100%" style="aspect-ratio: 9/16;"/>
+      <img x-show="!submitting" class="rounded-xl" src="/images/{{file}}" width="100%" style="aspect-ratio: 9/16;"/>
+      <span x-show="submitting">Uploadin ...</span>
       <div class="flex justify-between">
         <a href="/" class="btn btn-accent">Next</a>
         {{!-- <a href="/" class="btn btn-primary">Keep</a> --}}

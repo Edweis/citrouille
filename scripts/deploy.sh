@@ -1,14 +1,13 @@
 set -e
 
 PROJECT=citrouille
-USER=ubuntu
-SERVER=ssh.garnet.center
-DIR=/home/ubuntu/$PROJECT/
+USER=edweis
+SERVER=lipp.igw.world 
 
 
 
 echo "\n🚀 Send to server"
-rsync -ravzh --filter=':- .gitignore'  . $USER@$SERVER:$DIR 
+rsync -ravzh --filter=':- .gitignore'  . $USER@$SERVER:/home/$USER/$PROJECT/
 
 echo "\n🚀 Download dependencies"
 ssh -t $USER@$SERVER "cd $PROJECT ; pnpm install --prod"
