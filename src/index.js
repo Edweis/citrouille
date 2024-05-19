@@ -36,11 +36,10 @@ router.get('/', async (ctx) => {
 const genFilename = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 const parseFile = koaBody({ multipart: true, formidable: { filename: genFilename } })
 router.post('/', parseFile, async (ctx) => {
+  console.log(ctx.request.files)
   const { filepath, newFilename } = ctx.request.files.photo
-  console.log('Starting convert ...')
-  shell.exec(`convert ${filepath} -resize 1080x1920^ -auto-orient -quality 80 ${filepath}.webp`)
-  await fs.rename(filepath + '.webp', 'src/images/' + newFilename + '.webp')
-  ctx.redirect('/?file=' + newFilename + '.webp')
+  await fs.rename(filepath, 'src/images/' + newFilename)
+  ctx.redirect('/?file=' + newFilename)
 })
 
 app

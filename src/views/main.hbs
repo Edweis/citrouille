@@ -5,48 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/assets/styles.css" rel="stylesheet">
   <script src="/assets/alpine.js" defer=""></script>
+  <script src="/assets/compressor.js" defer=""></script>
   <script>
-    // Drag
-    window.onload = function() {
-      const main = document.querySelector('main')
-      function swipe(e){
-        const isTouch = e.type === 'touchstart'
-        if(!e.target.className.includes('draggable')) return;
-        e.target.style.transition = ''
-
-        let start;
-        function move(mouse) {
-          const x = isTouch ? mouse.touches[0].clientX : mouse.clientX
-          if(start==null) start = x;
-          const dir = Math.sign(x-start)
-          const offsetX = Math.pow(Math.abs(x-start), 1) * dir
-          const offsetY = -Math.pow(Math.abs(x-start), 1.2)/10
-          e.target.style.transform = 'translate('+offsetX+'px, '+offsetY+'px)'
-        }
-
-        function reset() {
-          e.target.style.transition = 'transform 500ms cubic-bezier(0, 0, 0.2, 1)'
-          e.target.style.transform = 'translate(0px, 0px)'
-          if(isTouch){
-            window.removeEventListener('touchmove', move);
-            window.removeEventListener('touchend', reset);
-          }else{
-            window.removeEventListener('mousemove', move);
-            window.removeEventListener('mouseup', reset);
-          }
-        }
-        if(isTouch){
-          window.addEventListener('touchmove', move);
-          window.addEventListener('touchend', reset);
-        }else {
-          window.addEventListener('mousemove', move);
-          window.addEventListener('mouseup', reset);
-        }
-      }
-      main.addEventListener('mousedown', swipe)
-      main.addEventListener('touchstart', swipe)
-    }
-
+    // Compress before sending
+    function compressFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      console.log('Compressing', {file})
+      new Compressor(file, {
+        quality: 0.8,
+        width: 1080,
+        height: 1920,
+        resize: "cover",
+        success(result) {
+          const formData = new FormData();
+          formData.append('photo', result, result.name);
+          fetch('/', {method:'POST', body: formData}).then(({url})=> window.location=url)
+        },
+        error:console.error
+      });
+    };
   </script>
   <title>Citrouille</title>
 </head>
@@ -54,11 +32,9 @@
   <main class="mx-auto max-w-sm mt-8 px-4 overflow-x-hidden">
     <header class="flex justify-between mb-4 items-center">
       <h1 class="text-3xl">Citrouille</h1>
-      <form @submit="submitting = true" action="/" method="POST" enctype="multipart/form-data">
-        <label class="link link-primary">Add
-          <input name="photo" type="file" class="hidden" onchange="form.submit();"/>
-        </label>
-      </form>
+      <label class="link link-primary">Add
+        <input type="file" class="hidden" onchange="compressFile(event)"/>
+      </label>
     </header>
     <article class="grid gap-8">
       <img x-show="!submitting" class="rounded-xl" src="/images/{{file}}" width="100%" style="aspect-ratio: 9/16;"/>
