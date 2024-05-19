@@ -857,21 +857,6 @@ html {
   --tw-border-opacity: 0.2;
 }
 
-.rating {
-  position: relative;
-  display: inline-flex;
-}
-
-.rating :where(input) {
-  cursor: pointer;
-  border-radius: 0px;
-  animation: rating-pop var(--animation-input, 0.25s) ease-out;
-  height: 1.5rem;
-  width: 1.5rem;
-  background-color: var(--fallback-bc,oklch(var(--bc)/var(--tw-bg-opacity)));
-  --tw-bg-opacity: 1;
-}
-
 .textarea {
   min-height: 3rem;
   flex-shrink: 1;
@@ -1215,39 +1200,6 @@ html {
   }
 }
 
-.rating input {
-  -moz-appearance: none;
-       appearance: none;
-  -webkit-appearance: none;
-}
-
-.rating .rating-hidden {
-  width: 0.5rem;
-  background-color: transparent;
-}
-
-.rating input[type="radio"]:checked {
-  background-image: none;
-}
-
-.rating input:checked ~ input,
-  .rating input[aria-checked="true"] ~ input {
-  --tw-bg-opacity: 0.2;
-}
-
-.rating input:focus-visible {
-  transition-property: transform;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  transition-duration: 300ms;
-  transform: translateY(-0.125em);
-}
-
-.rating input:active:focus {
-  animation: none;
-  transform: translateY(-0.125em);
-}
-
 @keyframes rating-pop {
   0% {
     transform: translateY(-0.125em);
@@ -1321,24 +1273,12 @@ html {
   margin-right: auto;
 }
 
-.mb-8 {
-  margin-bottom: 2rem;
-}
-
-.mt-8 {
-  margin-top: 2rem;
-}
-
-.mt-4 {
-  margin-top: 1rem;
-}
-
 .mb-4 {
   margin-bottom: 1rem;
 }
 
-.mt-2 {
-  margin-top: 0.5rem;
+.mt-8 {
+  margin-top: 2rem;
 }
 
 .flex {
@@ -1355,10 +1295,6 @@ html {
 
 .max-w-sm {
   max-width: 24rem;
-}
-
-.transform {
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
 .cursor-pointer {
@@ -1414,25 +1350,9 @@ html {
   padding-right: 1rem;
 }
 
-.pt-2 {
-  padding-top: 0.5rem;
-}
-
-.pt-4 {
-  padding-top: 1rem;
-}
-
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
-}
-
-.transition {
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
-  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 150ms;
 }
 
 /*For Alpinsjs transitions @see https://alpinejs.dev/directives/cloak */

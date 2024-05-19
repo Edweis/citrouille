@@ -11,6 +11,14 @@ export const database = await open({
   driver: sqlite3.Database,
 });
  
-// database.exec()
+database.exec(`
+  CREATE TABLE IF NOT EXISTS photos (
+      id TEXT PRIMARY KEY,
+      createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      note TEXT,
+      difficulty INTEGER DEFAULT 1,
+      category TEXT
+  );`)
 
 export default database

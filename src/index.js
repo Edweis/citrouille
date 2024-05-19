@@ -6,7 +6,7 @@ import { render } from './lib/render.js';
 import serve from 'koa-static'
 import mount from 'koa-mount'
 import fs from 'fs/promises'
-import shell from 'shelljs';
+import database from './lib/db.js';
 
 
 const app = new Koa();
@@ -21,7 +21,7 @@ app.use(mount('/images', serve('src/images', { maxAge: ONE_YEAR_IN_MS })))
 app.use(mount('/assets', serve('src/assets')))
 
 
-// Endpoints
+// Get a photo
 router.get('/', async (ctx) => {
   let file = ctx.query.file
   if (file == null) {
@@ -31,16 +31,30 @@ router.get('/', async (ctx) => {
     ctx.redirect('/?file=' + file)
   }
   file = file.split('/')[0] // for 'Security'
-  ctx.body = render('main', { file: file })
+  const details = await database.get('SELECT * FROM photos WHERE id = $0', file)
+  console.log({ details })
+  ctx.body = render('main', { file, details })
 });
 
+// Upload a photo
 const genFilename = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 const parseFile = koaBody({ multipart: true, formidable: { filename: genFilename } })
 router.post('/', parseFile, async (ctx) => {
   console.log(ctx.request.files)
   const { filepath, newFilename } = ctx.request.files.photo
   await fs.rename(filepath, 'src/images/' + newFilename)
+  await database.run(`INSERT INTO photos (id) VALUES (?);`, newFilename) 
   ctx.redirect('/?file=' + newFilename)
+})
+router.post('/edit/:file', koaBody({}), async (ctx) => {
+  const file = ctx.params.file
+  const { note, difficulty, category } = ctx.request.body
+  console.log('UPDATING ...', ctx.request.body, file)
+  await database.run(`
+    UPDATE photos 
+    SET note = ?, difficulty = ?, category = ?
+    WHERE id = ?`, note, difficulty, category, file);
+  ctx.redirect('/?file=' + file)
 })
 
 app
