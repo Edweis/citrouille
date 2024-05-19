@@ -16,7 +16,8 @@ const router = new Router();
 app.use(catchErrors)
 
 // Assets
-app.use(mount('/images', serve('src/images')))
+const ONE_YEAR_IN_MS = 1000 * 60 * 60 * 24 * 365
+app.use(mount('/images', serve('src/images', { maxAge: ONE_YEAR_IN_MS })))
 app.use(mount('/assets', serve('src/assets')))
 
 
