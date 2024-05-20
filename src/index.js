@@ -22,25 +22,28 @@ app.use(mount('/assets', serve('src/assets')))
 
 
 // Get a photo
+const ADDITIONAL_IMG = 4
 router.get('/', async (ctx) => {
-  let file = ctx.query.file
-  if (file == null) {
-    const allFiles = await fs.readdir('src/images')
-    if (allFiles.length === 0) file = 'no-file'
-    else file = allFiles.sort(() => Math.random() - 0.5)[0].replace('src/', '')
-    ctx.redirect('/?file=' + file)
-  }
-  file = file.split('/')[0] // for 'Security'
+  let file = ctx.query.file && ctx.query.file.split('/')[0]
+  
+  const allFiles = await fs.readdir('src/images')
+  const otherImages = allFiles
+    .sort(() => Math.random() - 0.5)
+    .map(f => f.replace('src/', ''))
+    .slice(0, ADDITIONAL_IMG - 1)
+
+  if (file == null)
+    return ctx.redirect('/?file=' + otherImages[0])
+  
   const details = await database.get('SELECT * FROM photos WHERE id = $0', file)
   console.log({ details })
-  ctx.body = render('main', { file, details })
+  ctx.body = render('main', { files: [...otherImages, file], details })
 });
 
 // Upload a photo
 const genFilename = () => Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 const parseFile = koaBody({ multipart: true, formidable: { filename: genFilename } })
 router.post('/', parseFile, async (ctx) => {
-  console.log(ctx.request.files)
   const { filepath, newFilename } = ctx.request.files.photo
   await fs.rename(filepath, 'src/images/' + newFilename)
   await database.run(`INSERT INTO photos (id) VALUES (?)`, newFilename)

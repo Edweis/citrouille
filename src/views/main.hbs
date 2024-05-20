@@ -44,13 +44,21 @@
       </label>
     </header>
     <article class="grid gap-8">
-      <img x-show="!submitting" class="rounded-xl mx-auto" src="/images/{{file}}"    style="aspect-ratio: 9/16; height:75vh;"/>
+      <div class="relative h-[75vh]" >
+        {{#each files}}
+        <img 
+          x-show="!submitting" 
+          class="rounded-xl absolute left-1/2 -translate-x-1/2 shadow-md border border-black" 
+          src="/images/{{this}}"    
+          style=" aspect-ratio: 9/16; top: {{@index}}rem; height: calc(66vh + 12px * {{@index}});"/>
+        {{/each}}
+      </div>
       <span x-show="submitting">Uploadin ...</span>
       <div class="flex justify-between">
         <a href="/" class="btn btn-accent">Next</a>
         {{!-- <a href="/" class="btn btn-primary">Keep</a> --}}
       </div>
-      <form class="grid gap-6" hx-put="/{{file}}">
+      <form class="grid gap-6" hx-put="/{{details.id}}">
         <textarea rows="10" class="rounded-md p-2" name="note" placeholder="Notes ...">{{details.note}}</textarea>
         <div class="flex items-center gap-2 justify-center" x-data="{ difficulty: {{details.difficulty}} }">
           <template x-for="index in 3">
@@ -65,7 +73,7 @@
       </form>
     </article>
     <div class="mt-8 text-center">
-      <button hx-delete="/{{file}}" class="link link-error" hx-confirm="No more of this BDK 😢?">Delete</button>
+      <button hx-delete="/{{details.id}}" class="link link-error" hx-confirm="No more of this BDK 😢?">Delete</button>
     </div>
   </main>
   
