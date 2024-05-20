@@ -25,7 +25,7 @@ app.use(mount('/assets', serve('src/assets')))
 const ADDITIONAL_IMG = 4
 router.get('/', async (ctx) => {
   let file = ctx.query.file && ctx.query.file.split('/')[0]
-  
+
   const allFiles = await fs.readdir('src/images')
   const otherImages = allFiles
     .sort(() => Math.random() - 0.5)
@@ -34,10 +34,13 @@ router.get('/', async (ctx) => {
 
   if (file == null)
     return ctx.redirect('/?file=' + otherImages[0])
-  
+
   const details = await database.get('SELECT * FROM photos WHERE id = $0', file)
   console.log({ details })
-  ctx.body = render('main', { files: [...otherImages, file], details })
+  ctx.body = render('main', {
+    files: [...otherImages, file],
+    details
+  })
 });
 
 // Upload a photo

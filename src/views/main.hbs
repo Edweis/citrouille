@@ -35,7 +35,7 @@
   </script>
   <title>Citrouille</title>
 </head>
-<body x-data="{ submitting: false }">
+<body>
   <main class="mx-auto max-w-sm mt-8 px-4 overflow-x-hidden">
     <header class="flex justify-between mb-4 items-center">
       <h1 class="text-3xl">Citrouille</h1>
@@ -44,18 +44,32 @@
       </label>
     </header>
     <article class="grid gap-8">
-      <div class="relative h-[75vh]" >
+      <div class="relative h-[75vh]" id="container">
         {{#each files}}
-        <img 
-          x-show="!submitting" 
-          class="rounded-xl absolute left-1/2 -translate-x-1/2 shadow-md border border-black" 
+        <img  
+          class="transition-all rounded-xl absolute left-1/2 -translate-x-1/2 shadow-md border border-black" 
           src="/images/{{this}}"    
-          style=" aspect-ratio: 9/16; top: {{@index}}rem; height: calc(66vh + 12px * {{@index}});"/>
+          style="aspect-ratio: 9/16; top: calc(var(--nth-child) * 1rem); height: calc(65vh + 12px * var(--nth-child)); z-index: calc(100 + var(--nth-child))"
+          data-id="{{this}}"
+        />
         {{/each}}
       </div>
-      <span x-show="submitting">Uploadin ...</span>
-      <div class="flex justify-between">
-        <a href="/" class="btn btn-accent">Next</a>
+      <div id="nav" class="flex justify-between" x-data="{ nextFile: document.querySelectorAll('img')}">
+        <a 
+          @click.prevent=""
+          hx-get="/"
+          hx-select="#container img:first-child"
+          hx-target="#container"
+          hx-swap="afterbegin"
+          hx-on::before-request="
+            const container = document.getElementById('container');
+            container.removeChild(container.lastElementChild);
+            const nextFile = container.lastElementChild.attributes['data-id'].value
+            this.setAttribute('hx-get', `/${nextFile}`);
+          "
+          hx-select-oob=""
+          class="btn btn-accent"
+        >Next</a>
         {{!-- <a href="/" class="btn btn-primary">Keep</a> --}}
       </div>
       <form class="grid gap-6" hx-put="/{{details.id}}">
