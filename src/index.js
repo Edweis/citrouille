@@ -43,12 +43,12 @@ router.post('/', parseFile, async (ctx) => {
   console.log(ctx.request.files)
   const { filepath, newFilename } = ctx.request.files.photo
   await fs.rename(filepath, 'src/images/' + newFilename)
-  await database.run(`INSERT INTO photos (id) VALUES (?)`, newFilename) 
+  await database.run(`INSERT INTO photos (id) VALUES (?)`, newFilename)
   ctx.redirect('/?file=' + newFilename)
 })
 
 // Update a photo
-router.post('/edit/:file', koaBody(), async (ctx) => {
+router.put('/:file', koaBody(), async (ctx) => {
   const file = ctx.params.file
   const { note, difficulty, category } = ctx.request.body
   console.log('UPDATING ...', ctx.request.body, file)
@@ -56,15 +56,15 @@ router.post('/edit/:file', koaBody(), async (ctx) => {
     UPDATE photos 
     SET note = ?, difficulty = ?, category = ?
     WHERE id = ?`, note, difficulty, category, file);
-  ctx.redirect('/?file=' + file)
+  ctx.body = undefined;
 })
 
 // Delete a photo
-router.post('/delete/:file', koaBody(), async (ctx) => {
+router.delete('/:file', koaBody(), async (ctx) => {
   const file = ctx.params.file;
   await database.run(`DELETE FROM photos WHERE id = ?`, file);
   fs.unlink('src/images/' + file)
-  ctx.redirect('/')
+  ctx.set('HX-Location', '/')
 })
 
 app
