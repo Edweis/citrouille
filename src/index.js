@@ -37,10 +37,7 @@ router.get('/', async (ctx) => {
 
   const details = await database.get('SELECT * FROM photos WHERE id = $0', file)
   console.log({ details })
-  ctx.body = render('main', {
-    files: [...otherImages, file],
-    details
-  })
+  ctx.body = render('main', { files: [...otherImages, file], details });
 });
 
 // Upload a photo
