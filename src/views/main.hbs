@@ -61,18 +61,18 @@
           hx-select="#container img:first-child"
           hx-target="#container"
           hx-swap="afterbegin"
-          hx-on::before-request="
+          hx-on::config-request="
             const container = document.getElementById('container');
             container.removeChild(container.lastElementChild);
             const nextFile = container.lastElementChild.attributes['data-id'].value
-            this.setAttribute('hx-get', `/${nextFile}`);
+            event.detail.path = '/?file='+nextFile
           "
-          hx-select-oob=""
+          hx-select-oob="#file-form"
           class="btn btn-accent"
         >Next</a>
         {{!-- <a href="/" class="btn btn-primary">Keep</a> --}}
       </div>
-      <form class="grid gap-6" hx-put="/{{details.id}}">
+      <form class="grid gap-6" hx-put="/{{details.id}}" id="file-form">
         <textarea rows="10" class="rounded-md p-2" name="note" placeholder="Notes ...">{{details.note}}</textarea>
         <div class="flex items-center gap-2 justify-center" x-data="{ difficulty: {{details.difficulty}} }">
           <template x-for="index in 3">
