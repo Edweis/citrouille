@@ -22,9 +22,9 @@ ssh $USER@$SERVER "\
   cd projects/$PROJECT ; \
   NODE_ENV=production PORT=$PORT pm2 \
     start ./src/index.js \
-    --name citrouille --time \
-    -o /home/$USER/.pm2/logs/citrouille-logs.log \
-    -e /home/$USER/.pm2/logs/citrouille-logs.log \
+    --name $PROJECT --time \
+    -o /home/$USER/.pm2/logs/$PROJECT-logs.log \
+    -e /home/$USER/.pm2/logs/$PROJECT-logs.log \
   || pm2 reload $PROJECT"
 
 # pm2 save
