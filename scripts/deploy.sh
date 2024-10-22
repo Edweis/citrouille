@@ -1,27 +1,30 @@
 set -e
 
 PROJECT=citrouille
-USER=edweis
-SERVER=lipp.igw.world 
+USER=lipp
+SERVER=lipp.local 
+PORT=6601
 
 
 
 echo "\n🚀 Send to server"
-rsync -ravzh --filter=':- .gitignore'  . $USER@$SERVER:/home/$USER/Documents/$PROJECT/
+rsync -ravzh --filter=':- .gitignore'  . $USER@$SERVER:/home/$USER/projects/$PROJECT/
 
 echo "\n🚀 Download dependencies"
-ssh -t $USER@$SERVER "cd Documents/$PROJECT ; pnpm install --prod"
+ssh $USER@$SERVER "cd projects/$PROJECT ; pnpm install --prod"
 
 echo "\n🏃🏻‍♂️ Restart nginx" # sudo ln -s /home/ubuntu/kobe/nginx.conf /etc/nginx/conf.d/kobe.conf # Make sure the symlink exists 
 ssh $USER@$SERVER "sudo nginx -t && sudo nginx -s reload"
 
-echo "\n🏃🏻‍♂️ Restart kobe"
-ssh $USER@$SERVER pm2 reload $PROJECT 
-
-
 
 ## Starting  pm2 for the first time
-# NODE_ENV=production pm2 start ./src/index.js \
-#     --name kobe --time \
-#     -o $HOME/.pm2/logs/kobe-logs.log -e $HOME/.pm2/logs/kobe-logs.log
+ssh $USER@$SERVER "\
+  cd projects/$PROJECT ; \
+  NODE_ENV=production PORT=$PORT pm2 \
+    start ./src/index.js \
+    --name citrouille --time \
+    -o /home/$USER/.pm2/logs/citrouille-logs.log \
+    -e /home/$USER/.pm2/logs/citrouille-logs.log \
+  || pm2 reload $PROJECT"
+
 # pm2 save

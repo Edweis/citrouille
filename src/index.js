@@ -70,7 +70,8 @@ router.delete('/:file', koaBody(), async (ctx) => {
   ctx.set('HX-Location', '/')
 })
 
+const PORT = process.env.PORT || 3000
 app
   .use(router.routes())
   .use(router.allowedMethods())
-  .listen(7761, () => console.log('Open: http://localhost:7761'));
+  .listen(PORT, () => console.log('Open: http://localhost:PORT'));
